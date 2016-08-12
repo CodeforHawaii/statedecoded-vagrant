@@ -6,6 +6,14 @@ A Vagrant configuration for State Decoded, to make it easy to get started.
 
 Installing Vagrant is very simple—simply [follow the instructions](http://docs.vagrantup.com/v2/installation/).
 
+You'll also need VirtualBox. If you've installed version 5, you'll also want to install
+the Vagrant plugin, vagrant-vbguest. Here's how:
+
+```
+vagrant plugin install vagrant-vbguest
+vagrant plugin list
+```
+
 You can find an installer for git [here](http://git-scm.com/downloads)
 
 ### Dowload the code and start the Vagrant Machine
@@ -13,6 +21,38 @@ You can find an installer for git [here](http://git-scm.com/downloads)
 * From the command line run `git clone https://github.com/statedecoded/statedecoded-vagrant`
 * cd into the statedecoded-vagrant directory
 * Download the git submodules using: `git submodule update --init`
+* Fix the Solr module and the config-sample.inc.php using these diffs
+```
+$ git submodule foreach git diff
+Entering 'modules/solr'
+diff --git a/manifests/params.pp b/manifests/params.pp
+index d90297e..54f7735 100644
+--- a/manifests/params.pp
++++ b/manifests/params.pp
+@@ -5,7 +5,7 @@ class solr::params {
+       $solr_version = '4.5.0'
+       $solr_home = '/opt'
+       # needs to be full path to apache root
+-      $apache_mirror = "apache.cs.utah.edu" #because this is sometimes depressingly slow
++      $apache_mirror = "archive.apache.org/dist/" #not all mirrors have old stuff
+       $zookeeper_hosts = ""
+       $exec_path = '/usr/bin:/usr/sbin:/bin:/usr/local/bin:/opt/local/bin'
+       $java_home = '/usr/lib/jvm/default-java'
+Entering 'src'
+diff --git a/includes/config-sample.inc.php b/includes/config-sample.inc.php
+index 9768935..e32a0eb 100644
+--- a/includes/config-sample.inc.php
++++ b/includes/config-sample.inc.php
+@@ -104,7 +104,7 @@ define('THEMES_DIR', WEB_ROOT . '/themes/');
+  * Which theme to use.
+  */
+ define('THEME_NAME', 'StateDecoded2013');
+-define('THEME_DIR', TEMPLATE_DIR . THEME_NAME . '/');
++define('THEME_DIR', THEMES_DIR . THEME_NAME . '/');
+ define('THEME_WEB_PATH', '/themes/' . THEME_NAME . '/');
+
+ /*
+```
 * Run the command `vagrant up` (This can take roughly 10 minutes or slightly longer if this is the first time)
 
 ### Watch puppet take care of most of the installation! (hopefully!)
