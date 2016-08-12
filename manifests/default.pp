@@ -20,8 +20,9 @@ package {[
 	 'tidy',
 	 'zip',
 	 'git',
+         'libxml2-utils',
 	 ]:
-     ensure => present 
+     ensure => present
 }
 
 # pacakges that are unessecary but useful for development
@@ -31,13 +32,13 @@ package {[
      'lynx',
     ]:
     ensure => present
-} ->
+}
 # adds some syntax highlighting/changes bash prompt
-class {'vm-config':} 
+class {'vm-config':}
 
 
 
-class { 'apache': 
+class { 'apache':
 	admin_email => "nskelsey@gmail.com",
     statedecoded_home => $statedecoded_home,
 }
@@ -101,7 +102,7 @@ class { "statedecoded":
     require => [Class['apache'], Class['mysql'], Class['php']],
 } ->
 
-package { 'default-jdk': 
+package { 'default-jdk':
     ensure => 'installed',
 } ->
 
